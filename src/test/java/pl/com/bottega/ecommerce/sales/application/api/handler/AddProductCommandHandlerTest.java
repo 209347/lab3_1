@@ -17,8 +17,7 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class AddProductCommandHandlerTest {
 
@@ -41,4 +40,30 @@ public class AddProductCommandHandlerTest {
 
         assertThat(addProductCommandHandler.handle(addProductCommand), Matchers.equalTo(null));
     }
+
+    @Test
+    public void handleShouldCallReservationRepositorySaveMethodOnce() {
+        AddProductCommandHandler addProductCommandHandler = new AddProductCommandHandler();
+        AddProductCommand addProductCommand = new AddProductCommand(Id.generate(), Id.generate(), 1);
+
+        Reservation reservation = mock(Reservation.class);
+        when(reservation.getStatus()).thenReturn(Reservation.ReservationStatus.OPENED);
+
+        ReservationRepository reservationRepository = mock(ReservationRepository.class);
+
+        Whitebox.setInternalState(addProductCommandHandler, "reservationRepository", reservationRepository);
+        when(reservationRepository.load(any(Id.class))).thenReturn(reservation);
+
+        ProductRepository productRepository = mock(ProductRepository.class);
+
+        Whitebox.setInternalState(addProductCommandHandler, "productRepository", productRepository);
+        Id id = new Id("1");
+        Product product = new Product(id, new Money(10), "Product1", ProductType.FOOD);
+        when(productRepository.load(any(Id.class))).thenReturn(product);
+
+        addProductCommandHandler.handle(addProductCommand);
+
+        verify(reservationRepository, times(1)).save(reservation);
+    }
+
 }
