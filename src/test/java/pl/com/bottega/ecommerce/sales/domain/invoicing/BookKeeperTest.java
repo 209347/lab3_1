@@ -79,4 +79,22 @@ public class BookKeeperTest {
 
         assertThat(result.getItems().size(), Matchers.is(3));
     }
+
+    @Test
+    public void requestingEmptyInvoiceShouldNotCallCalculateTax() {
+        ClientData client = new ClientData(Id.generate(), "testClient1");
+        InvoiceRequest invoiceRequest = new InvoiceRequest(client);
+
+        ProductData productData = mock(ProductData.class);
+        when(productData.getType()).thenReturn(ProductType.FOOD);
+
+        TaxPolicy taxPolicy = mock(TaxPolicy.class);
+        when(taxPolicy.calculateTax(ProductType.FOOD, new Money(10)))
+                .thenReturn(new Tax(new Money(1), "10%"));
+
+        BookKeeper bookKeeper = new BookKeeper(new InvoiceFactory());
+        Invoice invoiceResult = bookKeeper.issuance(invoiceRequest, taxPolicy);
+
+        verify(taxPolicy, times(0)).calculateTax(any(), any());
+    }
 }
