@@ -122,4 +122,24 @@ public class BookKeeperTest {
         assertThat(result.getClient().getName(), Matchers.is("testClient1"));
         assertThat(result.getClient().getAggregateId().getId(), Matchers.is("5"));
     }
+
+    @Test public void productDataGetTypeShouldBeCalledOnceForOneInvoiceItem() {
+        ClientData client = new ClientData(Id.generate(), "testClient1");
+        InvoiceRequest invoiceRequest = new InvoiceRequest(client);
+
+        ProductData productData = mock(ProductData.class);
+        when(productData.getType()).thenReturn(ProductType.FOOD);
+
+        RequestItem requestItem = new RequestItem(productData, 1, new Money(10));
+        invoiceRequest.add(requestItem);
+
+        TaxPolicy taxPolicy = mock(TaxPolicy.class);
+        when(taxPolicy.calculateTax(ProductType.FOOD, new Money(10)))
+                .thenReturn(new Tax(new Money(1), "10%"));
+
+        BookKeeper bookKeeper = new BookKeeper(new InvoiceFactory());
+        Invoice invoiceResult = bookKeeper.issuance(invoiceRequest, taxPolicy);
+
+        verify(productData, times(1)).getType();
+    }
 }
