@@ -97,4 +97,29 @@ public class BookKeeperTest {
 
         verify(taxPolicy, times(0)).calculateTax(any(), any());
     }
+
+    @Test
+    public void invoiceShouldReturnCorrectClientData(){
+        Id id = new Id("5");
+        ClientData client = new ClientData(id, "testClient1");
+        InvoiceRequest invoiceRequest = new InvoiceRequest(client);
+
+        ProductData productData = mock(ProductData.class);
+        when(productData.getType()).thenReturn(ProductType.FOOD);
+
+        RequestItem requestItem = new RequestItem(productData, 1, new Money(10));
+        invoiceRequest.add(requestItem);
+        invoiceRequest.add(requestItem);
+        invoiceRequest.add(requestItem);
+
+        TaxPolicy taxPolicy = mock(TaxPolicy.class);
+        when(taxPolicy.calculateTax(ProductType.FOOD, new Money(10)))
+                .thenReturn(new Tax(new Money(1), "10%"));
+
+        BookKeeper bookKeeper = new BookKeeper(new InvoiceFactory());
+        Invoice result = bookKeeper.issuance(invoiceRequest, taxPolicy);
+
+        assertThat(result.getClient().getName(), Matchers.is("testClient1"));
+        assertThat(result.getClient().getAggregateId().getId(), Matchers.is("5"));
+    }
 }
