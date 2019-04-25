@@ -26,15 +26,16 @@ public class AddProductCommandHandlerTest {
         AddProductCommandHandler addProductCommandHandler = new AddProductCommandHandler();
         AddProductCommand addProductCommand = new AddProductCommand(Id.generate(), Id.generate(), 1);
 
-        Reservation reservation = mock(Reservation.class);
+        ClientData clientData = new ClientData(Id.generate(), "clientData");
+        Reservation reservation = new Reservation(Id.generate(), Reservation.ReservationStatus.OPENED, clientData, new Date());
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
 
         Whitebox.setInternalState(addProductCommandHandler, "reservationRepository", reservationRepository);
         when(reservationRepository.load(any(Id.class))).thenReturn(reservation);
 
         ProductRepository productRepository = mock(ProductRepository.class);
-
         Whitebox.setInternalState(addProductCommandHandler, "productRepository", productRepository);
+
         Product product = new Product(Id.generate(), new Money(10), "Product1", ProductType.FOOD);
         when(productRepository.load(any(Id.class))).thenReturn(product);
 
@@ -46,9 +47,8 @@ public class AddProductCommandHandlerTest {
         AddProductCommandHandler addProductCommandHandler = new AddProductCommandHandler();
         AddProductCommand addProductCommand = new AddProductCommand(Id.generate(), Id.generate(), 1);
 
-        Reservation reservation = mock(Reservation.class);
-        when(reservation.getStatus()).thenReturn(Reservation.ReservationStatus.OPENED);
-
+        ClientData clientData = new ClientData(Id.generate(), "clientData");
+        Reservation reservation = new Reservation(Id.generate(), Reservation.ReservationStatus.OPENED, clientData, new Date());
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
 
         Whitebox.setInternalState(addProductCommandHandler, "reservationRepository", reservationRepository);
