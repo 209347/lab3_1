@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.ClientData;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
 import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductData;
+import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductDataBuilder;
 import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductType;
 import pl.com.bottega.ecommerce.sharedkernel.Money;
 
@@ -21,7 +22,13 @@ public class BookKeeperTest {
         ClientData client = new ClientData(Id.generate(), "testClient1");
         InvoiceRequest invoiceRequest = new InvoiceRequest(client);
 
-        ProductData productData = new ProductData(Id.generate(), new Money(10), "productData", ProductType.FOOD, new Date());
+        ProductData productData = new ProductDataBuilder()
+                .productId(Id.generate())
+                .price(new Money(10))
+                .name("productData")
+                .type(ProductType.FOOD)
+                .snapshotDate(new Date())
+                .build();
 
         RequestItem requestItem = new RequestItem(productData, 1, new Money(10));
         invoiceRequest.add(requestItem);
@@ -41,7 +48,13 @@ public class BookKeeperTest {
         ClientData client = new ClientData(Id.generate(), "testClient1");
         InvoiceRequest invoiceRequest = new InvoiceRequest(client);
 
-        ProductData productData = new ProductData(Id.generate(), new Money(10), "productData", ProductType.FOOD, new Date());
+        ProductData productData = new ProductDataBuilder()
+                .productId(Id.generate())
+                .price(new Money(10))
+                .name("productData")
+                .type(ProductType.FOOD)
+                .snapshotDate(new Date())
+                .build();
 
         RequestItem requestItem = new RequestItem(productData, 1, new Money(10));
         invoiceRequest.add(requestItem);
@@ -62,7 +75,13 @@ public class BookKeeperTest {
         ClientData client = new ClientData(Id.generate(), "testClient1");
         InvoiceRequest invoiceRequest = new InvoiceRequest(client);
 
-        ProductData productData = new ProductData(Id.generate(), new Money(10), "productData", ProductType.FOOD, new Date());
+        ProductData productData = new ProductDataBuilder()
+                .productId(Id.generate())
+                .price(new Money(10))
+                .name("productData")
+                .type(ProductType.FOOD)
+                .snapshotDate(new Date())
+                .build();
 
         RequestItem requestItem = new RequestItem(productData, 1, new Money(10));
         invoiceRequest.add(requestItem);
@@ -84,7 +103,13 @@ public class BookKeeperTest {
         ClientData client = new ClientData(Id.generate(), "testClient1");
         InvoiceRequest invoiceRequest = new InvoiceRequest(client);
 
-        ProductData productData = new ProductData(Id.generate(), new Money(10), "productData", ProductType.FOOD, new Date());
+        ProductData productData = new ProductDataBuilder()
+                .productId(Id.generate())
+                .price(new Money(10))
+                .name("productData")
+                .type(ProductType.FOOD)
+                .snapshotDate(new Date())
+                .build();
 
         TaxPolicy taxPolicy = mock(TaxPolicy.class);
         when(taxPolicy.calculateTax(ProductType.FOOD, new Money(10)))
@@ -102,7 +127,13 @@ public class BookKeeperTest {
         ClientData client = new ClientData(id, "testClient1");
         InvoiceRequest invoiceRequest = new InvoiceRequest(client);
 
-        ProductData productData = new ProductData(Id.generate(), new Money(10), "productData", ProductType.FOOD, new Date());
+        ProductData productData = new ProductDataBuilder()
+                .productId(Id.generate())
+                .price(new Money(10))
+                .name("productData")
+                .type(ProductType.FOOD)
+                .snapshotDate(new Date())
+                .build();
 
         RequestItem requestItem = new RequestItem(productData, 1, new Money(10));
         invoiceRequest.add(requestItem);
@@ -125,7 +156,13 @@ public class BookKeeperTest {
         ClientData client = new ClientData(Id.generate(), "testClient1");
         InvoiceRequest invoiceRequest = new InvoiceRequest(client);
 
-        ProductData productData = new ProductData(Id.generate(), new Money(10), "productData", ProductType.FOOD, new Date());
+        ProductData productData = new ProductDataBuilder()
+                .productId(Id.generate())
+                .price(new Money(10))
+                .name("productData")
+                .type(ProductType.FOOD)
+                .snapshotDate(new Date())
+                .build();
 
         RequestItem requestItem = new RequestItem(productData, 1, new Money(10));
         invoiceRequest.add(requestItem);
