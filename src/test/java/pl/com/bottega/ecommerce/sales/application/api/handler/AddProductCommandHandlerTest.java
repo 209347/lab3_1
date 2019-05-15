@@ -10,6 +10,7 @@ import pl.com.bottega.ecommerce.sales.domain.productscatalog.Product;
 import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductRepository;
 import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductType;
 import pl.com.bottega.ecommerce.sales.domain.reservation.Reservation;
+import pl.com.bottega.ecommerce.sales.domain.reservation.ReservationBuilder;
 import pl.com.bottega.ecommerce.sales.domain.reservation.ReservationRepository;
 import pl.com.bottega.ecommerce.sharedkernel.Money;
 
@@ -27,7 +28,12 @@ public class AddProductCommandHandlerTest {
         AddProductCommand addProductCommand = new AddProductCommand(Id.generate(), Id.generate(), 1);
 
         ClientData clientData = new ClientData(Id.generate(), "clientData");
-        Reservation reservation = new Reservation(Id.generate(), Reservation.ReservationStatus.OPENED, clientData, new Date());
+        Reservation reservation = new ReservationBuilder()
+                .reservationId(Id.generate())
+                .reservationStatus(Reservation.ReservationStatus.OPENED)
+                .clientData(clientData)
+                .createDate(new Date())
+                .build();
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
 
         Whitebox.setInternalState(addProductCommandHandler, "reservationRepository", reservationRepository);
@@ -48,7 +54,12 @@ public class AddProductCommandHandlerTest {
         AddProductCommand addProductCommand = new AddProductCommand(Id.generate(), Id.generate(), 1);
 
         ClientData clientData = new ClientData(Id.generate(), "clientData");
-        Reservation reservation = new Reservation(Id.generate(), Reservation.ReservationStatus.OPENED, clientData, new Date());
+        Reservation reservation = new ReservationBuilder()
+                .reservationId(Id.generate())
+                .reservationStatus(Reservation.ReservationStatus.OPENED)
+                .clientData(clientData)
+                .createDate(new Date())
+                .build();
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
 
         Whitebox.setInternalState(addProductCommandHandler, "reservationRepository", reservationRepository);
